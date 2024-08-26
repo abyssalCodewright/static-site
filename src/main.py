@@ -1,7 +1,9 @@
-from textnode import TextNode, text_type_bold
+from textnode import TextNode
+from htmlnode import HTMLNode
 
 def main():
-    node = TextNode("This should be bold text", text_type_bold)
-    print(node)
+    node = HTMLNode("a", "no words", None, {"href": "https://www.google.com", "target": "_blank"})
+    fixed_props = node.props_to_html()
+    print(fixed_props)
 
 main()
