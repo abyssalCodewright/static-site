@@ -1,6 +1,5 @@
 import unittest
-from htmlnode import HTMLNode
-from htmlnode import LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_repr_works(self):
@@ -63,6 +62,72 @@ class TestHTMLNode(unittest.TestCase):
         node = LeafNode("b", "This text is bold")
         enode = "<b>This text is bold</b>"
         self.assertEqual(node.to_html(), enode)
+
+
+    def test_parentnode_repr(self):
+        node = ParentNode(
+            "p", [
+                LeafNode("b", "This is bold text"),
+                LeafNode("i", "This is italic text")
+            ]
+        )
+        enode = "ParentNode(p, [LeafNode(b, This is bold text, None), LeafNode(i, This is italic text, None)], None)"
+        self.assertEqual(repr(node), enode)
+
+
+    def test_parentnode_tag_is_none(self):
+        node = ParentNode(None, [
+            LeafNode("b", "this is bold text"),
+            LeafNode("i", "some italic text")
+        ])
+        with self.assertRaises(ValueError) as context:
+            node.to_html()
+        self.assertEqual(str(context.exception), "ParentNode must have a tag")
+
+    
+    def test_parentnode_children_is_none(self):
+        node = ParentNode("p", None)
+
+        with self.assertRaises(ValueError) as context:
+            node.to_html()
+        self.assertEqual(str(context.exception), "ParentNode missing children")
+
+
+    def test_parentnode_one_child(self):
+        node = ParentNode("p", [LeafNode("b", "this text is bold")])
+        enode = "<p><b>this text is bold</b></p>"
+        self.assertEqual(node.to_html(), enode)
+
+
+    def test_parentnode_three(self):
+        node = ParentNode("p", [
+            LeafNode("b", "bold text"),
+            LeafNode("i", "italic text"),
+            LeafNode("code", "code text")
+        ])
+        enode = "<p><b>bold text</b><i>italic text</i><code>code text</code></p>"
+        self.assertEqual(node.to_html(), enode)
+
+
+    def test_parentnode_inside_parentnode(self):
+        node = ParentNode("p", [
+            LeafNode("code", "code text"),
+            ParentNode("b", [
+                LeafNode("i", "italic text")
+            ])
+        ])
+        enode = "<p><code>code text</code><b><i>italic text</i></b></p>"
+        self.assertEqual(node.to_html(), enode)
+
+
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        child_node = ParentNode("span", [grandchild_node])
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span><b>grandchild</b></span></div>",
+        )
 
 
 

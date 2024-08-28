@@ -1,9 +1,13 @@
 from textnode import TextNode
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 def main():
-    node = HTMLNode("a", "no words", None, {"href": "https://www.google.com", "target": "_blank"})
-    fixed_props = node.props_to_html()
-    print(fixed_props)
+    node = ParentNode(
+        "p", [
+            LeafNode("b", "This is bold text"),
+            LeafNode("i", "This is italic text")
+        ]
+    )
+    print(repr(node))
 
 main()
