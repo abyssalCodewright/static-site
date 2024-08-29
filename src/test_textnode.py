@@ -8,7 +8,9 @@ from textnode import (
     text_type_image,
     text_type_italic,
     text_type_link,
+    text_node_to_html_node
 )
+from htmlnode import LeafNode
 
 
 class TestTextNode(unittest.TestCase):
@@ -51,6 +53,31 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("This is text", text_type_bold, "website.com")
         expected = "TextNode(This is text, bold, website.com)"
         self.assertEqual(repr(node), expected)
+
+
+
+
+class TestTextNodeToHTMLNode(unittest.TestCase):
+    def test_text_to_html_text(self):
+        tnode = TextNode("hello", text_type_text)
+        lnode = text_node_to_html_node(tnode)
+        self.assertEqual(lnode.value, "hello")
+        self.assertEqual(lnode.tag, None)
+
+
+    def test_text_to_html_italic(self):
+        tnode = TextNode("hello", text_type_italic)
+        lnode = text_node_to_html_node(tnode)
+        self.assertEqual(lnode.tag, "i")
+        self.assertEqual(lnode.value, "hello")
+
+
+    def test_text_to_html_link(self):
+        tnode = TextNode("blizzard", text_type_link, "www.blizzard.com")
+        lnode = text_node_to_html_node(tnode)
+        self.assertEqual(lnode.tag, "a")
+        self.assertEqual(lnode.value, "blizzard")
+        self.assertEqual(lnode.props, {"href": "www.blizzard.com"})
 
 
 if __name__ == "__main__":
