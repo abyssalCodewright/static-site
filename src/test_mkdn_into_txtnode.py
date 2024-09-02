@@ -1,4 +1,4 @@
-from mkdn_into_txtnode import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
+from mkdn_into_txtnode import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_into_textnodes
 from textnode import (
     text_type_bold,
     text_type_code,
@@ -125,3 +125,8 @@ class TestInlineMarkdown(unittest.TestCase):
             ],
             split_nodes_link([node])
         )
+
+
+    def test_text_into_textnode(self):
+        words = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        text_into_textnodes(words)
