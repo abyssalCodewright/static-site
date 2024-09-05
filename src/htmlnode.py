@@ -59,9 +59,8 @@ class ParentNode(HTMLNode):
             raise ValueError("ParentNode missing children")
         
         all_child_nodes = ""
-        if self.children:
-            for child in self.children:
-                all_child_nodes += child.to_html()
+        for child in self.children:
+            all_child_nodes += child.to_html()
 
         rejoined = "".join(all_child_nodes)
 
