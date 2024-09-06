@@ -134,3 +134,24 @@ tag here
         self.assertEqual(block_to_block_type(block), block_type_olist)
         block = "paragraph"
         self.assertEqual(block_to_block_type(block), block_type_paragraph)
+
+
+    def test_heading(self):
+        words = markdown_to_html_node("### This is a third degree heading")
+        node = words.to_html()
+        self.assertEqual(node, "<div><h3>This is a third degree heading</h3></div>")
+
+
+    def test_heading_with_inline(self):
+        words = markdown_to_html_node("# Heading with *inline*")
+        node = words.to_html()
+        self.assertEqual(node, "<div><h1>Heading with <i>inline</i></h1></div>")
+
+
+    def test_code_block(self):
+        words = markdown_to_html_node("""
+```
+This is a code block. It has code in it.
+```""")
+        node = words.to_html()
+        self.assertEqual(node, "<div><pre><code>This is a code block. It has code in it.\n</code></pre></div>")
