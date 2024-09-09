@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from markdown_blocks import markdown_to_html_node
 
 def extract_title(markdown):
@@ -11,6 +12,16 @@ def extract_title(markdown):
             return line[2:]
         raise Exception("No H1 found")
     
+
+def generate_page_recursive(dir_path_content, template_path, dest_dir_path):
+
+    for item in os.listdir(dir_path_content):
+        if item.endswith(".md"):
+            generate_page(f'{dir_path_content}/{item}', template_path, f'{dest_dir_path}/{item[:-3]}.html')
+        else:
+            os.makedirs(f'{dest_dir_path}/{item}')
+            generate_page_recursive(f'{dir_path_content}/{item}', template_path, f'{dest_dir_path}/{item}')
+
 
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating path from {from_path} to {dest_path} using {template_path}...")
