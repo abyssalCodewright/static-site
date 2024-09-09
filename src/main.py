@@ -1,10 +1,12 @@
 import os
 import shutil
 from copy_static import copy_directory
+from generate_webpage import generate_page
 
 def main():
     clear_directory()
     copy_directory('static', 'public')
+    generate_page('content/index.md', 'template.html', 'public/index.html')
 
 
 def clear_directory():
